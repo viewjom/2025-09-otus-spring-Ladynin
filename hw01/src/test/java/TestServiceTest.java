@@ -21,11 +21,6 @@ public class TestServiceTest {
 
     @Test
     void executeTest() {
-        List<Answer> answer = Arrays.asList(
-                new Answer("Ohm", false),
-                new Answer("Decibels", true),
-                new Answer("Watts", false));
-
         List<Question> questionsExpected =
                 Arrays.asList(
                         new Question("What is the physical quantity \"sound intensity\" measured in?",
