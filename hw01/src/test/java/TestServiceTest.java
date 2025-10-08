@@ -2,10 +2,7 @@ import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.otus.hw.config.AppProperties;
-import ru.otus.hw.config.TestFileNameProvider;
 import ru.otus.hw.dao.CsvQuestionDao;
-import ru.otus.hw.dao.QuestionDao;
 import ru.otus.hw.domain.Answer;
 import ru.otus.hw.domain.Question;
 
@@ -13,19 +10,13 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class TestServiceTest {
-    private QuestionDao mockCsvQuestionDao;
-    private TestFileNameProvider testFileNameProvider;
-    CsvQuestionDao csvQuestionDao;
-
+    private CsvQuestionDao mockCsvQuestionDao;
     @BeforeEach
     void setUp() {
         mockCsvQuestionDao = mock(CsvQuestionDao.class);
-        testFileNameProvider = new AppProperties("questions.csv");
-        csvQuestionDao = new CsvQuestionDao(testFileNameProvider);
     }
 
     @Test
@@ -52,9 +43,8 @@ public class TestServiceTest {
                 );
 
         given(mockCsvQuestionDao.findAll()).willReturn(questionsExpected);
-        when(mockCsvQuestionDao.findAll()).thenReturn(questionsExpected);
 
-        List<Question> questions = csvQuestionDao.findAll();
+        List<Question> questions = mockCsvQuestionDao.findAll();
 
         verify(mockCsvQuestionDao, times(1)).findAll();
 
