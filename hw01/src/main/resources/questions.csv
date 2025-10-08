@@ -1,0 +1,4 @@
+# Добавить сюда своих вопросов. Эту строку надо пропустить при настройке CsvToBean (withSkipLines)
+What is the physical quantity "sound intensity" measured in?,Ohm%false|Decibels%true|Watts%false
+What is the physical quantity "pressure" measured in?,Newton meters%false|Pascals%true|Joules%false
+What is kinematics?,Study of the movement of objects%true|Study of interactions between objects%false|Study of the properties of solid objects%false
