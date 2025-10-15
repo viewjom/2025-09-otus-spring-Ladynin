@@ -19,28 +19,34 @@ public class TestServiceImpl implements TestService {
         ioService.printLine("");
         ioService.printFormattedLine("Please answer the questions below%n");
         List<Question> questions = csvQuestionDao.findAll();
-        try {
-            ioService.printLine(getTest(questions));
-        } catch (QuestionReadException e) {
-            ioService.printLine(String.format("Ошибка формата в вопросе: %s", e.getMessage()));
+
+        for (Question q : questions) {
+            try {
+                ioService.printLine(getTest(q));
+            } catch (QuestionReadException e) {
+                ioService.printLine(String.format("%s%n", e.getMessage()));
+            }
         }
     }
 
     @Override
-    public String getTest(List<Question> questions) {
-        StringBuffer stringBuffer = new StringBuffer();
-        for (Question q : questions) {
-            try {
-                stringBuffer.append(String.format("%s%n", q.text()));
-                String answer = q.answers()
-                        .stream()
-                        .map(s -> s.text())
-                        .collect(Collectors.joining(", "));
-                stringBuffer.append(String.format("%s%n", answer));
-            } catch (Exception e) {
-                throw new QuestionReadException(stringBuffer.toString());
-            }
+    public String getTest(Question question) {
+        String answer = null;
+        String qst = null;
+        try {
+            qst = question.text();
+        } catch (Exception e) {
+            throw new QuestionReadException("Format error in questions");
         }
-        return stringBuffer.toString();
+        try {
+            answer = question.answers()
+                    .stream()
+                    .map(s -> s.text())
+                    .collect(Collectors.joining(", "));
+
+        } catch (Exception e) {
+            throw new QuestionReadException("Format error in answers");
+        }
+        return String.format("%s%n%s%n", question.text(), answer);
     }
 }
