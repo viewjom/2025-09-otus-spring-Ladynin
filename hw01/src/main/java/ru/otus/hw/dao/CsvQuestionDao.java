@@ -40,6 +40,9 @@ public class CsvQuestionDao implements QuestionDao {
             throw new QuestionReadException(e.getMessage());
         }
 
-        return new ArrayList<>(questionDtos.stream().map(s -> s.toDomainObject()).collect(Collectors.toList()));
+        return new ArrayList<>(questionDtos
+                .stream()
+                .map(s -> s.toDomainObject())
+                .collect(Collectors.toList()));
     }
 }
