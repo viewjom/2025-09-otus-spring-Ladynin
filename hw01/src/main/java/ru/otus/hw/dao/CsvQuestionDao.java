@@ -21,28 +21,24 @@ public class CsvQuestionDao implements QuestionDao {
 
     @Override
     public List<Question> findAll() {
-
         List<QuestionDto> questionDtos;
-
-        try {
-            InputStream is = Question.class.getClassLoader()
-                    .getResourceAsStream(fileNameProvider.getTestFileName());
-
-            CSVReader csvReader = new CSVReaderBuilder(new InputStreamReader(is))
-                    .withSkipLines(1)
-                    .build();
-
-            questionDtos = new CsvToBeanBuilder<QuestionDto>(csvReader)
-                    .withType(QuestionDto.class)
-                    .build()
-                    .parse();
-
-            return new ArrayList<>(questionDtos
-                    .stream()
-                    .map(s -> s.toDomainObject())
-                    .collect(Collectors.toList()));
-        } catch (Exception e) {
-            throw new QuestionReadException(e.getMessage());
-        }
+        InputStream is = Question.class.getClassLoader()
+                .getResourceAsStream(fileNameProvider.getTestFileName());
+        CSVReader csvReader = new CSVReaderBuilder(new InputStreamReader(is))
+                .withSkipLines(1)
+                .build();
+        questionDtos = new CsvToBeanBuilder<QuestionDto>(csvReader)
+                .withType(QuestionDto.class)
+                .build()
+                .parse();
+        return new ArrayList<>(questionDtos
+                .stream()
+                .map(s -> {
+                    if (s.getAnswers() != null) {
+                        return s.toDomainObject();
+                    }
+                    throw new QuestionReadException(s.getText());
+                })
+                .collect(Collectors.toList()));
     }
 }
