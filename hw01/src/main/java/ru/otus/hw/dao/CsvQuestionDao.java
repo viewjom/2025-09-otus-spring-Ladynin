@@ -36,13 +36,13 @@ public class CsvQuestionDao implements QuestionDao {
                     .withType(QuestionDto.class)
                     .build()
                     .parse();
+
+            return new ArrayList<>(questionDtos
+                    .stream()
+                    .map(s -> s.toDomainObject())
+                    .collect(Collectors.toList()));
         } catch (Exception e) {
             throw new QuestionReadException(e.getMessage());
         }
-
-        return new ArrayList<>(questionDtos
-                .stream()
-                .map(s -> s.toDomainObject())
-                .collect(Collectors.toList()));
     }
 }

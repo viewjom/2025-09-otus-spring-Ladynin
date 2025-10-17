@@ -11,7 +11,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-public class TestHw01 {
+public class TestTestService {
     private TestService testService;
     private CsvQuestionDao mockCsvQuestionDao;
     private IOService mockIOService;
@@ -25,6 +25,9 @@ public class TestHw01 {
     @Test
     void executeTest() {
         testService.executeTest();
+        verify(mockIOService, times(1)).printLine("");
+        verify(mockIOService, times(1)).printFormattedLine("Please answer the questions below%n");
         verify(mockCsvQuestionDao, times(1)).findAll();
+        verify(mockIOService, times(1)).printLine("");
     }
 }

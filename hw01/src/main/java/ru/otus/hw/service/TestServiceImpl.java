@@ -5,7 +5,6 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import ru.otus.hw.dao.CsvQuestionDao;
 import ru.otus.hw.domain.Question;
-import ru.otus.hw.exceptions.QuestionReadException;
 
 @RequiredArgsConstructor
 public class TestServiceImpl implements TestService {
@@ -16,37 +15,24 @@ public class TestServiceImpl implements TestService {
 
     @Override
     public void executeTest() {
+        String qts = null;
         ioService.printLine("");
         ioService.printFormattedLine("Please answer the questions below%n");
         List<Question> questions = csvQuestionDao.findAll();
 
         for (Question q : questions) {
-            try {
-                ioService.printLine(getTest(q));
-            } catch (QuestionReadException e) {
-                ioService.printLine(String.format("%s%n", e.getMessage()));
-            }
+            qts = questionToString(q);
+            ioService.printLine(qts);
         }
     }
 
     @Override
-    public String getTest(Question question) {
-        String answer = null;
-        String qst = null;
-        try {
-            qst = question.text();
-        } catch (Exception e) {
-            throw new QuestionReadException("Format error in questions");
-        }
-        try {
-            answer = question.answers()
-                    .stream()
-                    .map(s -> s.text())
-                    .collect(Collectors.joining(", "));
+    public String questionToString(Question question) {
+        String answer = question.answers()
+                .stream()
+                .map(s -> s.text())
+                .collect(Collectors.joining(", "));
 
-        } catch (Exception e) {
-            throw new QuestionReadException("Format error in answers");
-        }
         return String.format("%s%n%s%n", question.text(), answer);
     }
 }

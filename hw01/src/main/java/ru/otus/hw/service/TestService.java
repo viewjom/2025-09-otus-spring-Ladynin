@@ -6,5 +6,5 @@ public interface TestService {
 
     void executeTest();
 
-    String getTest(Question question);
+    String questionToString(Question question);
 }
