@@ -6,15 +6,18 @@ import ru.otus.hw.exceptions.QuestionReadException;
 @RequiredArgsConstructor
 public class TestRunnerServiceImpl implements TestRunnerService {
 
-   private final TestService testService;
+    private final TestService testService;
+
+    private final IOService ioService;
 
     @Override
     public void run() {
         try {
-        testService.executeTest();
+            testService.executeTest();
         } catch (QuestionReadException e) {
-            //QuestionReadException - не перехватывается
-            System.out.println("Format error in answers: " + e);
+            ioService.printLine(e.getMessage());
+        } catch (Exception e) {
+            ioService.printLine("Unknown error: " + e.getMessage());
         }
     }
 }

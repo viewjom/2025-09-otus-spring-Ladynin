@@ -11,7 +11,6 @@ import ru.otus.hw.config.TestFileNameProvider;
 import ru.otus.hw.dao.dto.QuestionDto;
 import ru.otus.hw.domain.Question;
 
-import java.util.ArrayList;
 import java.util.List;
 import ru.otus.hw.exceptions.QuestionReadException;
 
@@ -21,24 +20,32 @@ public class CsvQuestionDao implements QuestionDao {
 
     @Override
     public List<Question> findAll() {
-        List<QuestionDto> questionDtos;
-        InputStream is = Question.class.getClassLoader()
-                .getResourceAsStream(fileNameProvider.getTestFileName());
-        CSVReader csvReader = new CSVReaderBuilder(new InputStreamReader(is))
-                .withSkipLines(1)
-                .build();
-        questionDtos = new CsvToBeanBuilder<QuestionDto>(csvReader)
-                .withType(QuestionDto.class)
-                .build()
-                .parse();
-        return new ArrayList<>(questionDtos
+        try {
+            List<QuestionDto> questionDtos;
+            InputStream is = Question.class.getClassLoader()
+                    .getResourceAsStream(fileNameProvider.getTestFileName());
+            CSVReader csvReader = new CSVReaderBuilder(new InputStreamReader(is))
+                    .withSkipLines(1)
+                    .build();
+
+            return new CsvToBeanBuilder<QuestionDto>(csvReader)
+                    .withType(QuestionDto.class)
+                    .build()
+                    .parse()
+                    .stream()
+                    .map(QuestionDto::toDomainObject)
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new QuestionReadException("Error during reading questions", e);
+        }
+    }
+
+    public String questionToString(Question question) {
+        String answer = question.answers()
                 .stream()
-                .map(s -> {
-                    if (s.getAnswers() != null) {
-                        return s.toDomainObject();
-                    }
-                    throw new QuestionReadException(s.getText());
-                })
-                .collect(Collectors.toList()));
+                .map(s -> s.text())
+                .collect(Collectors.joining(", "));
+
+        return String.format("%s%n%s%n", question.text(), answer);
     }
 }
