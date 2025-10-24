@@ -15,9 +15,9 @@ public class TestRunnerServiceImpl implements TestRunnerService {
         try {
             testService.executeTest();
         } catch (QuestionReadException e) {
-            ioService.printLine(e.getMessage());
+            ioService.printLine("Error during reading questions");
         } catch (Exception e) {
-            ioService.printLine("Unknown error: " + e.getMessage());
+            ioService.printLine("Unknown error");
         }
     }
 }

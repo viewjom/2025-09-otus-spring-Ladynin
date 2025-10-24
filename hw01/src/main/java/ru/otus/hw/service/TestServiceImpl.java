@@ -2,6 +2,7 @@ package ru.otus.hw.service;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import ru.otus.hw.converter.TestConverter;
 import ru.otus.hw.dao.CsvQuestionDao;
 import ru.otus.hw.domain.Question;
 
@@ -12,6 +13,8 @@ public class TestServiceImpl implements TestService {
 
     private final CsvQuestionDao csvQuestionDao;
 
+    private final TestConverter testConverter;
+
     @Override
     public void executeTest() {
         String qts = null;
@@ -20,7 +23,7 @@ public class TestServiceImpl implements TestService {
         List<Question> questions = csvQuestionDao.findAll();
 
         for (Question q : questions) {
-            qts = csvQuestionDao.questionToString(q);
+            qts = testConverter.questionToString(q);
             ioService.printLine(qts);
         }
     }
