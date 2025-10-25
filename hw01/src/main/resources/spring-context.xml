@@ -21,7 +21,7 @@
     </bean>
     <bean id="testService" class="ru.otus.hw.service.TestServiceImpl">
         <constructor-arg name="ioService" ref="ioService"/>
-        <constructor-arg name="csvQuestionDao" ref="csvQuestionDao"/>
+        <constructor-arg name="questionDao" ref="csvQuestionDao"/>
         <constructor-arg name="testConverter" ref="testConverter"/>
     </bean>
     <bean id="testRunnerService" class="ru.otus.hw.service.TestRunnerServiceImpl">

@@ -1,4 +1,4 @@
-package ru.otus.hw;
+package ru.otus.hw.service;
 
 import java.util.Arrays;
 import java.util.List;
@@ -9,26 +9,51 @@ import ru.otus.hw.converter.TestConverter;
 import ru.otus.hw.dao.CsvQuestionDao;
 import ru.otus.hw.domain.Answer;
 import ru.otus.hw.domain.Question;
-import ru.otus.hw.service.*;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TestTestService {
-    private final static String QUESTION_1 = "Is there life on Mars?\r\nScience doesn't know this yet, Certainly. The red UFO is from Mars. And green is from Venus, Absolutely not\r\n";
+public class TestServiceTest {
+    private final static String START = "";
 
-    private final static String QUESTION_2 = "How should resources be loaded form jar in Java?\r\nClassLoader#geResourceAsStream or ClassPathResource#getInputStream, ClassLoader#geResource#getFile + FileReader, Wingardium Leviosa\r\n";
+    private final static String QUESTION_1 = "Is there life on Mars?" + System.lineSeparator() +
+            "Science doesn't know this yet," +
+            " Certainly. The red UFO is from Mars. And green is from Venus," +
+            " Absolutely not" + System.lineSeparator();
 
-    private final static String QUESTION_3 = "Which option is a good way to handle the exception?\r\n@SneakyThrow, e.printStackTrace(), Rethrow with wrapping in business exception (for example, QuestionReadException), Ignoring exception\r\n";
+    private final static String QUESTION_2 = "How should resources be loaded form" +
+            " jar in Java?" + System.lineSeparator() +
+            "ClassLoader#geResourceAsStream or ClassPathResource#getInputStream," +
+            " ClassLoader#geResource#getFile + FileReader, Wingardium Leviosa" + System.lineSeparator();
 
-    private final static String QUESTION_4 = "What is the physical quantity SOUND-INTENSITY measured in?\r\nOhm, Decibels, Watts\r\n";
+    private final static String QUESTION_3 = "Which option is a good way to" +
+            " handle the exception?" + System.lineSeparator() +
+            "@SneakyThrow, e.printStackTrace()," +
+            " Rethrow with wrapping in business exception (for example, QuestionReadException)," +
+            " Ignoring exception" + System.lineSeparator();
 
-    private final static String QUESTION_5 = "What is the physical quantity \"pressure\" measured in?\r\nNewton meters, Pascals, Joules\r\n";
+    private final static String QUESTION_4 = "What is the physical quantity" +
+            " SOUND-INTENSITY measured in?" + System.lineSeparator() +
+            "Ohm, Decibels, Watts" + System.lineSeparator();
 
-    private final static String QUESTION_6 = "What is kinematics?\r\nStudy of the movement of objects, Study of interactions between objects, Study of the properties of solid objects\r\n";
+    private final static String QUESTION_5 = "What is the physical quantity \"pressure\"" +
+            " measured in?" + System.lineSeparator() +
+            "Newton meters, Pascals, Joules" + System.lineSeparator();
 
-    private TestRunnerService testRunnerService;
+    private final static String QUESTION_6 = "What is kinematics?" + System.lineSeparator() +
+            "Study of the movement of objects," +
+            " Study of interactions between objects," +
+            " Study of the properties of solid objects" + System.lineSeparator();
+
+    private final static List<String> EXPECTED_PRINT_QUESTIONS = Arrays.asList(
+            START,
+            QUESTION_1,
+            QUESTION_2,
+            QUESTION_3,
+            QUESTION_4,
+            QUESTION_5,
+            QUESTION_6);
 
     private TestService testService;
 
@@ -48,7 +73,7 @@ public class TestTestService {
 
     @Test
     void executeTest() {
-        Question question1 = new Question("Is there life on Mars?, answers=[Answer[text=Science doesn't know this yet, isCorrect=true], Answer[text=Certainly. The red UFO is from Mars. And green is from Venus, isCorrect=false], Answer[text=Absolutely not, isCorrect=false]]]",
+        Question question1 = new Question("Is there life on Mars?",
                 Arrays.asList(new Answer("Science doesn't know this yet", true),
                         new Answer("Certainly. The red UFO is from Mars. And green is from Venus, isCorrect", false),
                         new Answer("Absolutely not", false)));
@@ -93,13 +118,8 @@ public class TestTestService {
         verify(mockTestConverter, times(6)).questionToString(captor.capture());
 
         verify(mockIOService, times(7)).printLine(questionCaptor.capture());
-        var actualQuestion = questionCaptor.getAllValues();
+        var actualPrintQuestions = questionCaptor.getAllValues();
 
-        assertThat(QUESTION_1).isEqualTo(actualQuestion.get(1));
-        assertThat(QUESTION_2).isEqualTo(actualQuestion.get(2));
-        assertThat(QUESTION_3).isEqualTo(actualQuestion.get(3));
-        assertThat(QUESTION_4).isEqualTo(actualQuestion.get(4));
-        assertThat(QUESTION_5).isEqualTo(actualQuestion.get(5));
-        assertThat(QUESTION_6).isEqualTo(actualQuestion.get(6));
+        assertThat(EXPECTED_PRINT_QUESTIONS).isEqualTo(actualPrintQuestions);
     }
 }
