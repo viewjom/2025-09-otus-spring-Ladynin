@@ -4,6 +4,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 import ru.otus.hw.domain.Question;
 
+@Component
 public class TestConverterImpl implements TestConverter {
     @Override
     public String questionToString(Question question) {
