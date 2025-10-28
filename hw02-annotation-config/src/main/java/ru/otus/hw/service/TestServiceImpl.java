@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.otus.hw.converter.TestConverter;
 import ru.otus.hw.dao.QuestionDao;
+import ru.otus.hw.domain.Question;
 import ru.otus.hw.domain.Student;
 import ru.otus.hw.domain.TestResult;
 
@@ -28,16 +29,19 @@ public class TestServiceImpl implements TestService {
         var testResult = new TestResult(student);
 
         for (var question : questions) {
-            String qts = testConverter.questionToString(question);
-            ioService.printLine(qts);
-            int result = ioService.readIntForRangeWithPrompt(1, question.answers().size(), PROMPT, ERROR_MESSAGE);
-            var isAnswerValid = question
-                    .answers()
-                    .get(result - 1)
-                    .isCorrect();
+            var isAnswerValid = ask(question);
             testResult.applyAnswer(question, isAnswerValid);
-
         }
         return testResult;
+    }
+
+    private boolean ask(Question question) {
+        String qts = testConverter.questionToString(question);
+        ioService.printLine(qts);
+        int result = ioService.readIntForRangeWithPrompt(1, question.answers().size(), PROMPT, ERROR_MESSAGE);
+        return question
+                .answers()
+                .get(result - 1)
+                .isCorrect();
     }
 }
