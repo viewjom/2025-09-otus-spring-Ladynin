@@ -40,7 +40,7 @@ public class CsvQuestionDao implements QuestionDao {
                         .collect(Collectors.toList());
             }
         } catch (Exception e) {
-            throw new QuestionReadException("TestRunnerService.error.reading", e);
+            throw new QuestionReadException("Error during reading questions", e);
         }
     }
 }
