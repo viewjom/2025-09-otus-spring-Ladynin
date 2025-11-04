@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static ru.otus.hw.helper.QuestionBlanks.*;
-@SpringBootTest(classes = {CsvQuestionDao.class, LocalizedIOService.class, TestConverter.class})
+@SpringBootTest(classes = {TestService.class})
 public class TestServiceTest {
 
     private final static String NULL = "";
