@@ -1,9 +1,9 @@
 package ru.otus.hw.dao;
 
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import ru.otus.hw.config.TestFileNameProvider;
@@ -11,17 +11,13 @@ import ru.otus.hw.config.TestFileNameProvider;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static ru.otus.hw.helper.QuestionBlanks.EXPECTED_QUESTIONS;
-@SpringBootTest(classes = {TestFileNameProvider.class})
+
+@SpringBootTest(classes = CsvQuestionDao.class)
 public class CsvQuestionDaoTest {
     @MockitoBean
     private TestFileNameProvider mockTestFileNameProvider;
-
+    @Autowired
     private QuestionDao csvQuestionDao;
-
-    @BeforeEach
-    void setUp() {
-        csvQuestionDao = new CsvQuestionDao(mockTestFileNameProvider);
-    }
 
     @DisplayName("Интеграционный тест csvQuestionDao")
     @Test

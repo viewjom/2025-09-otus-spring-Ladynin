@@ -26,8 +26,6 @@ public class ShellCommands {
 
     private Student student;
 
-    private TestResult testResult;
-
     @ShellMethod(value = "Login", key = {"l", "login"})
     public void login() {
         student = studentService.determineCurrentStudent();
@@ -38,6 +36,7 @@ public class ShellCommands {
     @ShellMethod(value = "Start test command", key = {"t", "test"})
     @ShellMethodAvailability(value = "isStudentLogin")
     public void test() {
+        TestResult testResult;
         testResult = testService.executeTestFor(student);
         resultService.showResult(testResult);
     }
