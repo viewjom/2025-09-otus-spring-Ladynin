@@ -2,10 +2,10 @@ package ru.otus.hw.service;
 
 import java.util.Arrays;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -63,6 +63,10 @@ public class TestServiceTest {
             PRINT_QUESTION_5,
             PRINT_QUESTION_6);
 
+    private final static String FIRST_NAME = "Иван";
+
+    private final static String LAST_NAME = "Иванов";
+
     private static final String PROMPT = "TestService.answer.number";
 
     private static final String ERROR_MESSAGE = "TestService.answer.error";
@@ -74,8 +78,12 @@ public class TestServiceTest {
     private LocalizedIOService mockBeanIOService;
     @MockitoBean
     private TestConverter mockBeanTestConverter;
-    @Mock
-    private Student mockStudent;
+    private Student student;
+
+    @BeforeEach
+    void setUp() {
+        student = new Student(FIRST_NAME, LAST_NAME);
+    }
 
     @Test
     void executeTest() {
@@ -94,7 +102,7 @@ public class TestServiceTest {
         given(mockBeanIOService.readIntForRangeWithPromptLocalized(1, 3, PROMPT, ERROR_MESSAGE)).willReturn(1);
         given(mockBeanIOService.readIntForRangeWithPromptLocalized(1, 2, PROMPT, ERROR_MESSAGE)).willReturn(1);
 
-        testService.executeTestFor(mockStudent);
+        testService.executeTestFor(student);
 
         verify(mockBeanIOService, times(2)).printLine("");
         verify(mockBeanIOService, times(1)).printLineLocalized("TestService.answer.the.questions");
